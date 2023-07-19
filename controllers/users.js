@@ -6,8 +6,16 @@ const mongoose = require('mongoose');
 const { ValidationError } = mongoose.Error; // импорт ошибки валидации базы данных
 const { JWT_SECRET, NODE_ENV } = require('../utils/config'); // импорт параметров
 const {
-  STATUS_OK, ERROR_CODE_UNIQUE, MAX_AGE_COOKIE, SALT_ROUNDS_HASH, // импорт числовых констант
-} = require('../utils/constants');
+  STATUS_OK,
+  ERROR_CODE_UNIQUE,
+  MAX_AGE_COOKIE,
+  SALT_ROUNDS_HASH,
+  MESSAGE_INCORRECT_DATA,
+  MESSAGE_UNIQUE,
+  MESSAGE_CONFIRMATION,
+  MESSAGE_NOT_FOUND,
+  MESSAGE_VALIDATION,
+} = require('../utils/constants'); // импорт констант
 const User = require('../models/user'); // импорт схемы БД пользователь
 
 // Импорт дописанных ошибок
@@ -27,9 +35,9 @@ module.exports.createUser = (req, res, next) => {
     .then((user) => res.status(STATUS_OK).send(user.toJSON()))
     .catch((err) => {
       if (err.code === ERROR_CODE_UNIQUE) {
-        next(new NotUniqueData('Пользователь с такой почтой уже зарегистрирован'));
+        next(new NotUniqueData(MESSAGE_UNIQUE));
       } else if (err instanceof ValidationError) {
-        next(new IncorrectData('Переданы некорректные данные при создании пользователя'));
+        next(new IncorrectData(MESSAGE_INCORRECT_DATA));
       } else {
         next(err);
       }
@@ -53,7 +61,7 @@ module.exports.login = (req, res, next) => {
         sameSite: 'none',
         secure: NODE_ENV === 'production',
       })
-        .send({ message: 'Авторизация прошла успешно' });
+        .send({ message: MESSAGE_CONFIRMATION });
     })
     .catch(next);
 };
@@ -61,13 +69,13 @@ module.exports.login = (req, res, next) => {
 // Контроллек запроса выхода пользователя
 module.exports.logout = (req, res) => {
   res.clearCookie('token')
-    .send({ message: 'Выход' });
+    .send({ message: MESSAGE_CONFIRMATION });
 };
 
 // Вспомогательная функция по поиску в БД по id
 const findById = (req, res, next, id) => {
   User.findById(id)
-    .orFail(new NotFoundError(`Пользователь по указанному id: ${id} не найден`))
+    .orFail(new NotFoundError(MESSAGE_NOT_FOUND))
     .then((user) => res.send(user))
     .catch(next);
 };
@@ -85,9 +93,9 @@ const updateUserData = (req, res, next, param) => {
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.code === ERROR_CODE_UNIQUE) {
-        next(new NotUniqueData('Пользователь с такой почтой уже зарегистрирован'));
+        next(new NotUniqueData(MESSAGE_UNIQUE));
       } else if (err instanceof ValidationError) {
-        next(new ValidationError('Переданы некорректные данные'));
+        next(new ValidationError(MESSAGE_VALIDATION));
       } else {
         next(err);
       }

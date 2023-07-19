@@ -1,5 +1,5 @@
-// Импорт кода ошибки
-const { ERROR_DEFAULT } = require('../utils/constants');
+// Импорт констант
+const { ERROR_DEFAULT, MESSAGE_DEFAULT } = require('../utils/constants');
 
 // Общий обработчик ошибки
 module.exports = (err, req, res, next) => {
@@ -10,7 +10,7 @@ module.exports = (err, req, res, next) => {
     .send({
       // проверить статус и выставить сообщение в зависимости от него
       message: statusCode === ERROR_DEFAULT
-        ? 'На сервере произошла ошибка'
+        ? MESSAGE_DEFAULT
         : message,
     });
   next(); // перенаправить на следующий обработчик

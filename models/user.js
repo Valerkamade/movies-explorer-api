@@ -7,21 +7,23 @@ const validator = require('validator');
 const NotFoundAuth = require('../errors/not-found-auth');
 
 // Импорт констант
-const { MAX_LENGTH_WORD, MIN_LENGTH_WORD } = require('../utils/constants');
+const {
+  MAX_LENGTH_WORD, MIN_LENGTH_WORD, MESSAGE_VALIDATION, MESSAGE_ERROR_AUTH,
+} = require('../utils/constants');
 
 // Определение схемы пользователя
 const userSchema = new mongoose.Schema({
   name: { // имя пользователя: строка длиной от 2 до 30 символов, по умолчанию Пользователь
     type: String,
-    minlength: [MIN_LENGTH_WORD, 'Слишком короткое имя'],
-    maxlength: [MAX_LENGTH_WORD, 'Слишком длинное имя'],
+    minlength: MIN_LENGTH_WORD,
+    maxlength: MAX_LENGTH_WORD,
     default: 'Пользователь',
   },
   email: { // обязателдьное поле почта: уникальная строка
     type: String,
     validate: {
       validator: (v) => validator.isEmail(v),
-      message: 'Введен некорректный адрес почты',
+      message: MESSAGE_VALIDATION,
     },
     required: true,
     unique: true,
@@ -38,12 +40,12 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
   return this.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        return Promise.reject(new NotFoundAuth('Неправильные почта или пароль'));
+        return Promise.reject(new NotFoundAuth(MESSAGE_ERROR_AUTH));
       }
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new NotFoundAuth('Неправильные почта или пароль'));
+            return Promise.reject(new NotFoundAuth(MESSAGE_ERROR_AUTH));
           }
           return user;
         });
