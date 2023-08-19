@@ -17,15 +17,17 @@ const LENGTH_ID = 24;
 
 // Текстовые константы
 const MESSAGE_INCORRECT_DATA = 'Переданы некорректные данные';
-const MESSAGE_NOT_FOUND = 'Запрашиваемые данные не найдены';
+const MESSAGE_NOT_FOUND = 'Страница по указанному маршруту не найдена.';
 const MESSAGE_NOT_ACCESS = 'Нельзя удалять чужие данные';
 const MESSAGE_CONFIRMATION = 'Действие успешно выполнено';
-const MESSAGE_UNIQUE = 'Пользователь с такой почтой уже зарегистрирован';
+const MESSAGE_UNIQUE = 'Пользователь с таким email уже существует.';
 const MESSAGE_VALIDATION = 'Данные введены в неверном формате';
 const MESSAGE_NEED_AUTH = 'Необходима авторизация';
 const MESSAGE_DEFAULT = 'На сервере произошла ошибка';
 const MESSAGE_VALIDATION_URL = 'Введен некорректный адрес url';
-const MESSAGE_ERROR_AUTH = 'Неправильные почта или пароль';
+const MESSAGE_ERROR_AUTH = 'Вы ввели неправильный логин или пароль.';
+const MESSAGE_ERROR_PROFILE = 'При обновлении профиля произошла ошибка.';
+const MESSAGE_ERROR_REGISTER = 'При регистрации пользователя произошла ошибка.';
 
 module.exports = {
   ERROR_INCORRECT_DATA,
@@ -53,4 +55,6 @@ module.exports = {
   MESSAGE_DEFAULT,
   MESSAGE_VALIDATION_URL,
   MESSAGE_ERROR_AUTH,
+  MESSAGE_ERROR_PROFILE,
+  MESSAGE_ERROR_REGISTER,
 };

@@ -33,7 +33,7 @@ const ALLOWED_CORS = [
 
 // Регулярные выражения
 const REGEX = /^(https?:\/\/)?[^\s]*\.(jpg|jpeg|png|gif|bmp|test)$/;
-const REGEX_MOVIE = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|rutube\.ru)\/(.+)$/;
+const REGEX_MOVIE = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com|kinopoisk\.ru)\/(.+)$/;
 
 module.exports = {
   PORT,
